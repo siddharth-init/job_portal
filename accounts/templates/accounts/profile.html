@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>My Profile</h2>
+{% if profile.resume %}
+    <p>
+        Current Resume:
+        <a href="{{ profile.resume.url }}" target="_blank">
+            View Resume
+        </a>
+    </p>
+{% endif %}
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">
+        Update Profile
+    </button>
+</form>
+{% endblock %}

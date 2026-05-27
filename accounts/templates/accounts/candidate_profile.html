@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body">
+
+            <h2 class="mb-4">
+
+                Candidate Profile
+
+            </h2>
+
+            <table class="table">
+
+                <tr>
+
+                    <th>Username</th>
+
+                    <td>
+
+                        {{ candidate.username }}
+
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Email</th>
+
+                    <td>
+
+                        {{ candidate.email }}
+
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Role</th>
+
+                    <td>
+
+                        {{ candidate.profile.role }}
+
+                    </td>
+
+                </tr>
+
+                {% if candidate.profile.bio %}
+
+                <tr>
+
+                    <th>Bio</th>
+
+                    <td>
+
+                        {{ candidate.profile.bio }}
+
+                    </td>
+
+                </tr>
+
+                {% endif %}
+
+                {% if candidate.profile.resume %}
+
+                <tr>
+
+                    <th>Resume</th>
+
+                    <td>
+
+                        <a
+                            href="{{ candidate.profile.resume.url }}"
+                            class="btn btn-primary"
+                            target="_blank">
+
+                            View Resume
+
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                {% endif %}
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

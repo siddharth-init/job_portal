@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block content %}
+
+<h1>Welcome to Django Job Portal</h1>
+<p>This is the homepage.</p>
+{% if user.profile.role == "recruiter" %}
+    <p>Recruiter HOME</p>
+{% else %}
+    <p>Candidate HOME</p>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,374 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h1>
+
+            Recruiter Dashboard
+
+        </h1>
+
+        <a
+            href="{% url 'create_job' %}"
+            class="btn btn-primary">
+
+            Create New Job
+
+        </a>
+
+    </div>
+
+<div class="row mb-5">
+
+    <div class="col-md-3">
+
+        <a
+            href="{% url 'recruiter_jobs' %}"
+            class="text-decoration-none text-dark">
+
+            <div class="card dashboard-card gradient-blue shadow-sm border-0 text-center p-3">
+
+                <h5>Total Jobs</h5>
+
+                <h2
+                    class="counter"
+                    data-target="{{ total_jobs }}">
+
+                    0
+
+                </h2>
+
+            </div>
+
+        </a>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <a
+            href="{% url 'recruiter_applications' %}"
+            class="text-decoration-none text-dark">
+
+            <div class="card dashboard-card gradient-green shadow-sm border-0 text-center p-3">
+
+                <h5>Total Applicants</h5>
+
+                <h2
+                    class="counter"
+                    data-target="{{ total_applications }}">
+
+                    0
+
+                </h2>
+
+            </div>
+
+        </a>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <a
+            href="{% url 'recruiter_applications' %}?status=shortlisted"
+            class="text-decoration-none text-dark">
+
+            <div class="card dashboard-card gradient-orange shadow-sm border-0 text-center p-3">
+
+                <h5>Shortlisted</h5>
+
+                <h2
+                    class="counter"
+                    data-target="{{ shortlisted_count }}">
+
+                    0
+
+                </h2>
+
+            </div>
+
+        </a>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <a
+            href="{% url 'recruiter_applications' %}?status=rejected"
+            class="text-decoration-none text-dark">
+
+            <div class="card dashboard-card gradient-red shadow-sm border-0 text-center p-3">
+
+                <h5>Rejected</h5>
+
+                <h2
+                    class="counter"
+                    data-target="{{ rejected_count }}">
+
+                    0
+
+                </h2>
+
+            </div>
+
+        </a>
+
+    </div>
+
+</div>
+
+<!-- STEP 6 STARTS HERE -->
+
+<div class="card shadow-sm border-0 mb-5">
+
+    <div class="card-body">
+
+        <h4 class="mb-4">
+
+            Application Analytics
+
+        </h4>
+
+        <canvas id="applicationChart"></canvas>
+
+    </div>
+
+</div>
+
+
+    <div class="row">
+
+        <div class="col-md-6">
+
+            <div class="card shadow-sm border-0 mb-4">
+
+                <div class="card-body">
+
+                    <h4 class="mb-3">
+
+                        Recent Jobs
+
+                    </h4>
+
+                    {% for job in recent_jobs %}
+
+                        <div class="mb-3">
+
+                            <h6>
+
+                                {{ job.title }}
+
+                            </h6>
+
+                            <p class="text-muted mb-1">
+
+                                {{ job.company_name }}
+
+                            </p>
+
+                            <p class="text-muted mb-1">
+
+                                {{ job.created_at }}
+
+                            </p>
+
+                        </div>
+
+                    {% empty %}
+
+                        <p>No jobs posted yet.</p>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="card shadow-sm border-0 mb-4">
+
+                <div class="card-body">
+
+                    <h4 class="mb-3">
+
+                        Recent Applicants
+
+                    </h4>
+
+                    {% for application in recent_applications %}
+
+                        <div class="mb-3">
+
+                            <h6>
+
+                                {{ application.user.username }}
+
+                            </h6>
+
+                            <p class="text-muted mb-1">
+
+                                Applied for:
+                                {{ application.job.title }} on {{ application.applied_at }} 
+
+                            </p>
+
+                            {% if application.status == 'pending' %}
+
+                                <span class="badge bg-warning text-dark p-2">
+                                    Pending
+                                </span>
+
+                            {% elif application.status == 'shortlisted' %}
+
+                                <span class="badge bg-success p-2">
+                                    Shortlisted
+                                </span>
+
+                            {% elif application.status == 'rejected' %} 
+
+                                <span class="badge bg-danger p-2">
+                                    Rejected
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    {% empty %}
+
+                        <p>No applicants yet.</p>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    /*
+    -------------------------
+    Animated Counters
+    -------------------------
+    */
+
+    const counters = document.querySelectorAll('.counter');
+
+    counters.forEach(counter => {
+
+        const target = parseInt(counter.dataset.target);
+
+        let current = 0;
+
+        const increment = Math.ceil(target / 30);
+
+        function updateCounter() {
+
+            if (current < target) {
+
+                current += increment;
+
+                if (current > target) {
+
+                    current = target;
+                }
+
+                counter.innerText = current;
+
+                setTimeout(updateCounter, 50);
+
+            } else {
+
+                counter.innerText = target;
+            }
+        }
+
+        updateCounter();
+    });
+
+
+    /*
+    -------------------------
+    Chart.js Analytics
+    -------------------------
+    */
+
+    const canvas = document.getElementById('applicationChart');
+
+    if (canvas && typeof Chart !== 'undefined') {
+
+        const ctx = canvas.getContext('2d');
+
+        new Chart(ctx, {
+
+            type: 'bar',
+
+            data: {
+
+                labels: [
+
+                    'Applicants',
+                    'Shortlisted',
+                    'Rejected'
+
+                ],
+
+                datasets: [{
+
+                    label: 'Recruitment Analytics',
+
+                    data: [
+
+                        {{ total_applications }},
+                        {{ shortlisted_count }},
+                        {{ rejected_count }}
+
+                    ],
+
+                    backgroundColor: [
+
+                        '#1cc88a',
+                        '#f6c23e',
+                        '#e74a3b'
+
+                    ],
+
+                    borderWidth: 1
+                }]
+            },
+
+            options: {
+
+                responsive: true,
+
+                scales: {
+
+                    y: {
+
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+});
+
+</script>
+
+{% endblock %}
