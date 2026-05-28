@@ -55,8 +55,16 @@ def login_user(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                messages.success(request, f"Welcome {username}")
-                return redirect("home")
+
+                if user.profile.role == "candidate":  # type: ignore
+                    return redirect("dashboard")
+                elif user.profile.role == "recruiter":  # type: ignore
+                    return redirect("dashboard")
+                else:
+                    return redirect("home")
+
+            else:
+                messages.error(request, "Invalid username or password")
 
     else:
         form = AuthenticationForm()

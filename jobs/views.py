@@ -1,4 +1,5 @@
 from email.mime import application
+from functools import total_ordering
 import re
 
 from django.shortcuts import redirect, render, get_object_or_404
@@ -25,7 +26,99 @@ from django.views.generic import (
     DeleteView,
 )
 
+from django.contrib.auth.models import User
+from accounts.models import Profile
+
 # Create your views here.
+
+
+"""
+Without login / general section start
+"""
+
+
+def home(request):
+    latest_jobs = Job.objects.order_by("-created_at")[:6]
+    total_jobs = Job.objects.count()
+    total_candidates = Profile.objects.filter(role="candidate").count()
+    total_recruiters = Profile.objects.filter(role="recruiter").count()
+    return render(
+        request,
+        "home.html",
+        {
+            "latest_jobs": latest_jobs,
+            "total_jobs": total_jobs,
+            "total_candidates": total_candidates,
+            "total_recruiters": total_recruiters,
+        },
+    )
+
+
+class JobListView(ListView):
+    model = Job
+    template_name = "jobs/job_list.html"
+    context_object_name = "jobs"
+    paginate_by = 2
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        # queryset = Job.objects.all() # This is same as above line
+        keyword = self.request.GET.get("keyword")
+        location = self.request.GET.get("location")
+        company = self.request.GET.get("company")
+
+        if keyword:
+            queryset = queryset.filter(title__icontains=keyword)
+
+        if location:
+            queryset = queryset.filter(location__icontains=location)
+
+        if company:
+            queryset = queryset.filter(company_name__icontains=company)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        saved_job_ids = []
+        if self.request.user.is_authenticated:
+            saved_job_ids = self.request.user.saved_jobs.values_list("id", flat=True)
+        context["saved_job_ids"] = saved_job_ids
+
+        return context
+
+
+class JobDetailView(DetailView):
+
+    model = Job
+
+    template_name = "jobs/job_detail.html"
+
+    context_object_name = "job"
+
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+
+        job = self.get_object()
+
+        user_application_exists = False
+
+        if self.request.user.is_authenticated:
+
+            user_application_exists = Application.objects.filter(
+                user=self.request.user, job=job
+            ).exists()
+
+        context["user_application_exists"] = user_application_exists
+
+        return context
+
+
+"""
+Without login / general section end
+"""
+
 
 """
 Recruiter Section Start 
@@ -147,72 +240,6 @@ class RecruiterApplicationsView(ListView):
         return queryset.order_by("-applied_at")
 
 
-"""
-Recruiter Section End 
-"""
-
-
-class JobListView(ListView):
-    model = Job
-    template_name = "jobs/job_list.html"
-    context_object_name = "jobs"
-    paginate_by = 2
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        # queryset = Job.objects.all() # This is same as above line
-        keyword = self.request.GET.get("keyword")
-        location = self.request.GET.get("location")
-        company = self.request.GET.get("company")
-
-        if keyword:
-            queryset = queryset.filter(title__icontains=keyword)
-
-        if location:
-            queryset = queryset.filter(location__icontains=location)
-
-        if company:
-            queryset = queryset.filter(company_name__icontains=company)
-
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        saved_job_ids = []
-        if self.request.user.is_authenticated:
-            saved_job_ids = self.request.user.saved_jobs.values_list("id", flat=True)
-        context["saved_job_ids"] = saved_job_ids
-
-        return context
-
-
-class JobDetailView(DetailView):
-
-    model = Job
-
-    template_name = "jobs/job_detail.html"
-
-    context_object_name = "job"
-
-    def get_context_data(self, **kwargs):
-
-        context = super().get_context_data(**kwargs)
-
-        job = self.get_object()
-
-        user_application_exists = False
-
-        if self.request.user.is_authenticated:
-
-            user_application_exists = Application.objects.filter(
-                user=self.request.user, job=job
-            ).exists()
-
-        context["user_application_exists"] = user_application_exists
-
-        return context
-
-
 @login_required
 def update_application_status(request, application_id, status):
     application = get_object_or_404(Application, id=application_id)
@@ -235,6 +262,15 @@ def update_application_status(request, application_id, status):
         messages.success(request, "Application status updated and email sent")
 
     return redirect("job_applicants", pk=job.id)  # type: ignore
+
+
+"""
+Recruiter Section End 
+"""
+
+"""
+Candidate section Start
+"""
 
 
 @login_required
@@ -273,3 +309,8 @@ def save_job(request, id):
         job.saved_by.add(request.user)
         messages.success(request, "You have successfully saved this job")
     return redirect("job_detail", pk=id)
+
+
+"""
+Candidate section End
+"""

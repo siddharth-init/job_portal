@@ -1,0 +1,345 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- HERO SECTION -->
+
+<section class="hero-gradient text-white py-5">
+    <!-- Animated Background Blobs -->
+
+    <div class="blob blob-1"></div>
+
+    <div class="blob blob-2"></div>
+
+    <div class="container position-relative" style="z-index: 2;">
+
+        <div class="row align-items-center">
+
+            <div class="col-md-6">
+
+                <h1 class="display-4 fw-bold mb-4">
+
+                    Find Your Dream Job
+
+                </h1>
+
+                <p class="lead mb-4">
+
+                    Connect candidates and recruiters
+                    in one modern hiring platform.
+
+                </p>
+
+<!-- HERO BUTTONS -->
+
+<div class="mb-5">
+
+    <a
+        href="{% url 'job_list' %}"
+        class="btn btn-primary btn-lg me-3">
+
+        Browse Jobs
+
+    </a>
+
+    {% if not user.is_authenticated %}
+
+        <a
+            href="{% url 'register' %}"
+            class="btn btn-warning btn-lg glow-button">
+
+            Register
+
+        </a>
+
+    {% endif %}
+
+</div>
+
+            <!-- HERO COUNTERS -->
+
+            <div class="row text-center mt-5">
+
+                <div class="col-4">
+
+                    <h2
+                        class="fw-bold counter"
+                        data-target="{{ total_jobs }}">
+
+                        0
+
+                    </h2>
+
+                    <p class="text-light">
+
+                        Jobs
+
+                    </p>
+
+                </div>
+
+                <div class="col-4">
+
+                    <h2
+                        class="fw-bold counter"
+                        data-target="{{ total_candidates }}">
+
+                        0
+
+                    </h2>
+
+                    <p class="text-light">
+
+                        Candidates
+
+                    </p>
+
+                </div>
+
+                <div class="col-4">
+
+                    <h2
+                        class="fw-bold counter"
+                        data-target="{{ total_recruiters }}">
+
+                        0
+
+                    </h2>
+
+                    <p class="text-light">
+
+                        Recruiters
+
+                    </p>
+
+                </div>
+
+            </div>                
+
+
+            </div>
+
+            <div class="col-md-6 text-center">
+
+                <img
+                    src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                    class="img-fluid floating-image"
+                    style="max-height: 350px;">
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- FEATURES SECTION -->
+
+<section class="py-5 bg-light">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+
+            <h2 class="fw-bold">
+
+                Platform Features
+
+            </h2>
+
+            <p class="text-muted">
+
+                Everything you need for modern recruitment
+
+            </p>
+
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-md-3">
+
+                <div class="card shadow-sm border-0 h-100 text-center p-4 hover-card">
+
+                    <h4>
+
+                        Recruiter Dashboard
+
+                    </h4>
+
+                    <p class="text-muted">
+
+                        Manage jobs and applicants efficiently.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <div class="card shadow-sm border-0 h-100 text-center p-4 hover-card">
+
+                    <h4>
+
+                        Resume Upload
+
+                    </h4>
+
+                    <p class="text-muted">
+
+                        Candidates can upload resumes easily.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <div class="card shadow-sm border-0 h-100 text-center p-4 hover-card">
+
+                    <h4>
+
+                        Email Notifications
+
+                    </h4>
+
+                    <p class="text-muted">
+
+                        Instant recruiter updates by email.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <div class="card shadow-sm border-0 h-100 text-center p-4 hover-card">
+
+                    <h4>
+
+                        Analytics Dashboard
+
+                    </h4>
+
+                    <p class="text-muted">
+
+                        Visual insights for recruiters.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- LATEST JOBS -->
+
+<section class="py-5">
+
+    <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <h2 class="fw-bold">
+
+                Latest Jobs
+
+            </h2>
+
+            <a
+                href="{% url 'job_list' %}"
+                class="btn btn-outline-primary">
+
+                View All
+
+            </a>
+
+        </div>
+
+        <div class="row g-4">
+
+            {% for job in latest_jobs %}
+
+                <div class="col-md-4">
+
+                    <div class="card shadow-sm border-0 h-100 hover-card">
+
+                        <div class="card-body">
+
+                            <h5 class="fw-bold">
+
+                                {{ job.title }}
+
+                            </h5>
+
+                            <p class="text-muted mb-2">
+
+                                {{ job.company }}
+
+                            </p>
+
+                            <p>
+
+                                {{ job.description|truncatewords:20 }}
+
+                            </p>
+
+                            <a
+                                href="{% url 'job_detail' job.id %}"
+                                class="btn btn-primary">
+
+                                View Details
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% empty %}
+
+                <p>
+
+                    No jobs available yet.
+
+                </p>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer class="bg-dark text-white text-center py-3">
+
+    <p class="mb-0">
+
+        © 2026 Job Portal. All rights reserved.
+
+    </p>
+
+</footer>
+
+{% endblock %}

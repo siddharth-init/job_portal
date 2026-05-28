@@ -1,0 +1,332 @@
+body {
+
+    padding-top: 80px;
+
+}
+
+.dashboard-card {
+
+    transition: all 0.3s ease;
+
+    cursor: pointer;
+
+    color: white;
+
+    border-radius: 15px;
+}
+
+.dashboard-card:hover {
+
+    transform: translateY(-5px);
+
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.gradient-blue {
+
+    background: linear-gradient(135deg,
+            #4e73df,
+            #224abe);
+}
+
+.gradient-green {
+
+    background: linear-gradient(135deg,
+            #1cc88a,
+            #13855c);
+}
+
+.gradient-orange {
+
+    background: linear-gradient(135deg,
+            #f6c23e,
+            #dda20a);
+}
+
+.gradient-red {
+
+    background: linear-gradient(135deg,
+            #e74a3b,
+            #be2617);
+}
+
+.counter {
+
+    font-size: 2rem;
+
+    font-weight: bold;
+}
+
+.hover-card {
+
+    transition: all 0.3s ease;
+
+}
+
+.hover-card:hover {
+
+    transform: translateY(-8px);
+
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+
+}
+
+.hero-gradient {
+
+    background: linear-gradient(135deg,
+            #0f172a,
+            #1e3a8a,
+            #2563eb);
+
+}
+
+.hero-section {
+
+    position: relative;
+
+    overflow: hidden;
+
+}
+
+
+/*
+Background Blobs
+*/
+
+.blob {
+
+    position: absolute;
+
+    border-radius: 50%;
+
+    filter: blur(60px);
+
+    opacity: 0.35;
+
+    animation: blobFloat 12s ease-in-out infinite;
+
+}
+
+
+/*
+Blob 1
+*/
+
+.blob-1 {
+
+    width: 300px;
+
+    height: 300px;
+
+    background: #3b82f6;
+
+    top: -100px;
+
+    left: -100px;
+
+}
+
+
+/*
+Blob 2
+*/
+
+.blob-2 {
+
+    width: 350px;
+
+    height: 350px;
+
+    background: #9333ea;
+
+    bottom: -120px;
+
+    right: -120px;
+
+    animation-delay: 3s;
+
+}
+
+
+/*
+Blob Animation
+*/
+
+@keyframes blobFloat {
+
+    0% {
+
+        transform: translateY(0px) scale(1);
+
+    }
+
+    50% {
+
+        transform: translateY(-20px) scale(1.05);
+
+    }
+
+    100% {
+
+        transform: translateY(0px) scale(1);
+
+    }
+
+}
+
+
+.floating-image {
+
+    animation: floatAnimation 4s ease-in-out infinite;
+
+}
+
+
+@keyframes floatAnimation {
+
+    0% {
+
+        transform: translateY(0px);
+
+    }
+
+    50% {
+
+        transform: translateY(-15px);
+
+    }
+
+    100% {
+
+        transform: translateY(0px);
+
+    }
+
+}
+
+.glass-navbar {
+
+    background: rgba(15, 23, 42, 0.45);
+
+    backdrop-filter: blur(12px);
+
+    -webkit-backdrop-filter: blur(12px);
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    transition: all 0.3s ease;
+
+}
+
+
+/*
+Navbar after scrolling
+*/
+
+.glass-navbar.scrolled {
+
+    background: rgba(15, 23, 42, 0.95);
+
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+
+}
+
+.nav-animated {
+
+    position: relative;
+
+    transition: color 0.3s ease;
+
+}
+
+
+/*
+Underline effect
+*/
+
+.nav-animated::after {
+
+    content: '';
+
+    position: absolute;
+
+    left: 0;
+
+    bottom: 0;
+
+    width: 0;
+
+    height: 2px;
+
+    background: #ffffff;
+
+    transition: width 0.3s ease;
+
+}
+
+
+/*
+Hover animation
+*/
+
+.nav-animated:hover::after {
+
+    width: 100%;
+
+}
+
+.glow-button {
+
+    position: relative;
+
+    overflow: hidden;
+
+    transition: all 0.3s ease;
+
+    box-shadow: 0 0 15px rgba(255, 193, 7, 0.4);
+
+}
+
+
+/*
+Hover Glow
+*/
+
+.glow-button:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+
+        0 0 20px rgba(255, 193, 7, 0.7),
+
+        0 0 40px rgba(255, 193, 7, 0.4);
+
+}
+
+.animated-logo {
+
+    font-size: 1.5rem;
+
+    letter-spacing: 1px;
+
+    transition: all 0.3s ease;
+
+}
+
+
+/*
+Hover Effect
+*/
+
+.animated-logo:hover {
+
+    transform: translateY(-2px);
+
+    text-shadow:
+
+        0 0 10px rgba(255, 255, 255, 0.8),
+
+        0 0 20px rgba(255, 255, 255, 0.4);
+
+}

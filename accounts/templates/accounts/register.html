@@ -1,32 +1,187 @@
-{% extends "base.html" %}
-
-{% block title %}
-Register
-{% endblock %}
+{% extends 'base.html' %}
 
 {% block content %}
 
-<div class="row justify-content-center">
+<div class="container mt-5">
 
-    <div class="col-md-6">
+    <div class="row justify-content-center">
 
-        <div class="card shadow p-4">
+        <div class="col-md-6">
 
-            <h2 class="mb-4 text-center">
-                Create Account
-            </h2>
+            <div class="card shadow-lg border-0 rounded-4">
 
-            <form method="POST">
-                {% csrf_token %}
+                <div class="card-body p-5">
 
-                {{ form.as_p }}
+                    <!-- Heading -->
 
-                <button type="submit"
-                        class="btn btn-primary w-100">
-                    Register
-                </button>
+                    <div class="text-center mb-4">
 
-            </form>
+                        <h2 class="fw-bold">
+
+                            Create Account
+
+                        </h2>
+
+                        <p class="text-muted">
+
+                            Join the Job Portal platform
+
+                        </p>
+
+                    </div>
+
+                    <!-- Form -->
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        <!-- Username -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Username
+
+                            </label>
+
+                            {{ form.username }}
+
+                        </div>
+
+                        <!-- Email -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Email Address
+
+                            </label>
+
+                            {{ form.email }}
+
+                        </div>
+
+                        <!-- Role -->
+
+<div class="mb-4">
+
+    <label class="form-label d-block mb-2">
+
+        Register As
+
+    </label>
+
+    <div class="form-check">
+
+        <input
+            type="radio"
+            name="role"
+            value="candidate"
+            class="form-check-input"
+            id="candidate"
+            checked>
+
+        <label
+            class="form-check-label"
+            for="candidate">
+
+            Candidate
+
+        </label>
+
+    </div>
+
+    <div class="form-check">
+
+        <input
+            type="radio"
+            name="role"
+            value="recruiter"
+            class="form-check-input"
+            id="recruiter">
+
+        <label
+            class="form-check-label"
+            for="recruiter">
+
+            Recruiter
+
+        </label>
+
+    </div>
+
+</div>
+
+                        <!-- Password -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Password
+
+                            </label>
+
+                            {{ form.password1 }}
+
+                        </div>
+
+                        <!-- Confirm Password -->
+
+                        <div class="mb-4">
+
+                            <label class="form-label">
+
+                                Confirm Password
+
+                            </label>
+
+                            {{ form.password2 }}
+
+                        </div>
+
+                        <!-- Submit Button -->
+
+                        <div class="d-grid">
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary btn-lg rounded-3">
+
+                                Register
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                    <!-- Login Link -->
+
+                    <div class="text-center mt-4">
+
+                        <p class="mb-0">
+
+                            Already have an account?
+
+                            <a
+                                href="{% url 'login' %}"
+                                class="text-decoration-none fw-bold">
+
+                                Login
+
+                            </a>
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 

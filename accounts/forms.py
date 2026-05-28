@@ -18,10 +18,17 @@ class ProfileForm(forms.ModelForm):
 
 class RegisterForm(UserCreationForm):
 
-    email = forms.EmailField(required=True)
+    email = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(
+            attrs={"class": "form-control", "placeholder": "Enter your email"}
+        ),
+    )
 
     role = forms.ChoiceField(
-        choices=ROLE_CHOICES, widget=forms.RadioSelect, required=True
+        choices=ROLE_CHOICES,
+        widget=forms.RadioSelect(attrs={"class": "form-check-input"}),
+        required=True,
     )
 
     class Meta:
@@ -35,3 +42,16 @@ class RegisterForm(UserCreationForm):
             "password1",
             "password2",
         ]
+
+    def __init__(self, *args, **kwargs):
+        super(RegisterForm, self).__init__(*args, **kwargs)
+
+        self.fields["username"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "Enter username"}
+        )
+        self.fields["password1"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "Enter password"}
+        )
+        self.fields["password2"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "Confirm password"}
+        )
